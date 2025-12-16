@@ -20,6 +20,8 @@
 <div style="max-width:900px;margin:0 auto;">
 
 ## 📢 Updates
+- 2025-12-17: You can now view AgentNet dataset trajectories online via [AgentNet Data Viewer](https://agentnet_data_viewer.xlang.ai/), or use the code in `data/vis/` to visualize your own trajectory data. See [vis/README.md](./data/vis/README.md) for usage instructions.
+
 - 2025-11-28: VLLM support of OpenCUA is available at [[Model] Add OpenCUA-7B support #29068](https://github.com/vllm-project/vllm/pull/29068). Super grateful to [lim4349](https://github.com/lim4349) !
   
 - 2025-10-12:  <span style="font-weight:bold">[OpenCUA-7B-exl2](https://huggingface.co/sujitvasanth/OpenCUA-7B-exl2) is now live!</span> ⚡️  
