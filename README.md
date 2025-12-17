@@ -10,7 +10,7 @@
 </h1>
 
 <p align="center">
-&nbsp&nbsp🌐 <a href="https://opencua.xlang.ai/">Website</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://arxiv.org/abs/2508.09123">Paper</a>&nbsp&nbsp | &nbsp&nbsp🤗 <a href="https://huggingface.co/datasets/xlangai/AgentNet">Dataset</a>&nbsp&nbsp | &nbsp&nbsp🤖 <a href="https://huggingface.co/collections/xlangai/opencua-open-foundations-for-computer-use-agents-6882014ebecdbbe46074a68d">Model</a>&nbsp&nbsp | &nbsp&nbsp🔧  <a href="https://agentnet-tool.xlang.ai/">Tool</a>&nbsp&nbsp | &nbsp&nbsp🎮  <a href="https://huggingface.co/spaces/xlangai/OpenCUA-demo">Model Demo</a>&nbsp&nbsp 
+&nbsp&nbsp🌐 <a href="https://opencua.xlang.ai/">Website</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://arxiv.org/abs/2508.09123">Paper</a>&nbsp&nbsp | &nbsp&nbsp🤗 <a href="https://huggingface.co/datasets/xlangai/AgentNet">Dataset</a>&nbsp&nbsp | &nbsp&nbsp🔎 <a href="https://agentnet_data_viewer.xlang.ai/">Data Viewer</a>&nbsp&nbsp | &nbsp&nbsp🤖 <a href="https://huggingface.co/collections/xlangai/opencua-open-foundations-for-computer-use-agents-6882014ebecdbbe46074a68d">Model</a>&nbsp&nbsp | &nbsp&nbsp🔧  <a href="https://agentnet-tool.xlang.ai/">Tool</a>&nbsp&nbsp | &nbsp&nbsp🎮  <a href="https://huggingface.co/spaces/xlangai/OpenCUA-demo">Model Demo</a>&nbsp&nbsp 
 </p>
 
 <div align="center">
@@ -21,6 +21,7 @@
 
 ## 📢 Updates
 - 2025-12-17: You can now view AgentNet dataset trajectories online via [AgentNet Data Viewer](https://agentnet_data_viewer.xlang.ai/), or use the code in `data/vis/` to visualize your own trajectory data. See [vis/README.md](./data/vis/README.md) for usage instructions.
+
 
 - 2025-11-28: VLLM support of OpenCUA is available at [[Model] Add OpenCUA-7B support #29068](https://github.com/vllm-project/vllm/pull/29068). Super grateful to [lim4349](https://github.com/lim4349) !
   
