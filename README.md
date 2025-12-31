@@ -299,7 +299,7 @@ If you use OpenCUA in your research, please cite our work:
       eprint={2508.09123},
       archivePrefix={arXiv},
       primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2508.09123}, 
+      url={https://arxiv.org/abs/2508.09123}
 }
 ```
 
