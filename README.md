@@ -20,7 +20,7 @@
 <div style="max-width:900px;margin:0 auto;">
 
 ## 📢 Updates
-- 2026-01-17: 🎉 **vLLM now fully supports OpenCUA-7B, OpenCUA-32B, and OpenCUA-72B!** Thanks to the [Meituan EvoCUA Team](https://github.com/meituan/EvoCUA) for their contributions to vLLM integration. See [vLLM Serve](#vllm-serve) for usage instructions.
+- 2026-01-17: 🎉 **vLLM now fully supports OpenCUA-7B, OpenCUA-32B, and OpenCUA-72B!** Thanks to the [Meituan EvoCUA Team](https://github.com/meituan/EvoCUA) for their contributions to vLLM integration. See [vLLM Serve](model/README.md) for usage instructions.
 
 - 2025-12-17: You can now view AgentNet dataset trajectories online via [AgentNet Data Viewer](https://agentnet_data_viewer.xlang.ai/), or use the code in `data/vis/` to visualize your own trajectory data. See [vis/README.md](./data/vis/README.md) for usage instructions. We also summarized the metadata of AgentNet here [Metadata json](https://huggingface.co/datasets/xlangai/AgentNet/blob/main/meta_data_merged.jsonl).
 
