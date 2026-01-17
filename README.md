@@ -20,6 +20,8 @@
 <div style="max-width:900px;margin:0 auto;">
 
 ## 📢 Updates
+- 2026-01-17: 🎉 **vLLM now fully supports OpenCUA-7B, OpenCUA-32B, and OpenCUA-72B!** Thanks to the [Meituan EvoCUA Team](https://github.com/meituan/EvoCUA) for their contributions to vLLM integration. See [vLLM Serve](#vllm-serve) for usage instructions.
+
 - 2025-12-17: You can now view AgentNet dataset trajectories online via [AgentNet Data Viewer](https://agentnet_data_viewer.xlang.ai/), or use the code in `data/vis/` to visualize your own trajectory data. See [vis/README.md](./data/vis/README.md) for usage instructions. We also summarized the metadata of AgentNet here [Metadata json](https://huggingface.co/datasets/xlangai/AgentNet/blob/main/meta_data_merged.jsonl).
 
 
@@ -88,11 +90,59 @@ snapshot_download(
 )
 ```
 
-### 🎯 GUI Grounding 
+### 🚀 vLLM Serve
 
-You can run the five grounding examples in [OpenCUA/model/inference/huggingface_inference.py](./inference/huggingface_inference.py):
-``` 
+We recommend using vLLM for production deployment. Requires **vllm>=0.12.0** with `--trust-remote-code`.
+
+```bash
+# OpenCUA-7B (single GPU)
+vllm serve xlangai/OpenCUA-7B \
+  --trust-remote-code \
+  --served-model-name opencua-7b \
+  --host 0.0.0.0 \
+  --port 8000
+
+# OpenCUA-32B (4 GPUs, tensor parallel)
+vllm serve xlangai/OpenCUA-32B \
+  --trust-remote-code \
+  --tensor-parallel-size 4 \
+  --served-model-name opencua-32b \
+  --host 0.0.0.0 \
+  --port 8000
+
+# OpenCUA-72B with data parallelism (tp=2, dp=4 for 4 instances on 8 GPUs)
+vllm serve xlangai/OpenCUA-72B \
+  --trust-remote-code \
+  --tensor-parallel-size 2 \
+  --data-parallel-size 4 \
+  --gpu-memory-utilization 0.85 \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+Adjust `--tensor-parallel-size`, `--data-parallel-size`, and `--gpu-memory-utilization` based on your hardware configuration.
+
+For more examples and inference code, see [model/inference/vllm_inference.py](./model/inference/vllm_inference.py).
+
+### 🎯 GUI Grounding
+
+First, start the vLLM server (using OpenCUA-7B as example):
+```bash
+vllm serve xlangai/OpenCUA-7B \
+  --trust-remote-code \
+  --served-model-name opencua-7b \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+Then run the grounding examples:
+```
 cd ./model/inference/
+python vllm_inference.py
+```
+
+Or with HuggingFace Transformers (no server required):
+```
 python huggingface_inference.py
 ```
 
@@ -110,9 +160,6 @@ Command for running OpenCUA-7B and OpenCUA-32B in OSWorld:
         --num_envs 30  \
         --coordinate_type qwen25
 ```
-<div style="border-left: 6px solid #9ca3af; background: #f5f5f5; padding: 12px 16px; margin: 16px 0;">
-  <em>Currently we only supports huggingface inference. We are implementing the vLLM supports of OpenCUA models. Please stay tuned.</em>
-</div>
 
 ---
 
@@ -253,21 +300,22 @@ Empirically, models trained with these rich CoTs scale better with data and gene
 👉 See **[AgentNetBench/README.md](./evaluation/agentnetbench/README.md)** for usage instructions.
 
 ## TODO
-- [ ] **vLLM Support**  
-  - Actively working with the vLLM team to add support for OpenCUA models.  
-  - **Workaround:** For now, use the standard `transformers` library as shown in the examples above.  
-  - Will update this section once vLLM support becomes available.
+- [x] **vLLM Support** ✅
+  - vLLM now fully supports OpenCUA-7B, OpenCUA-32B, and OpenCUA-72B.
+  - See [vLLM Serve](#vllm-serve) section for usage instructions.
+  - Thanks to the Meituan EvoCUA Team for their contributions!
 
-- [ ] **Training Code**  
-  - OpenCUA models are developed based on the training infrastructure of Kimi Team.  
+- [ ] **Training Code**
+  - OpenCUA models are developed based on the training infrastructure of Kimi Team.
   - Currently developing the training pipeline based on open-source infrastructure.
 
 ## Acknowledge
 <p>
-We thank Yu Su, Caiming Xiong, and the anonymous reviewers for their insightful discussions and valuable feedback. 
-We are grateful to Moonshot AI for providing training infrastructure and annotated data. 
-We also sincerely appreciate Hao Yang, Zhengtao Wang, and Yanxu Chen from the Kimi Team for their strong infrastructure support and helpful guidance. 
-The development of our tool is based on the open-source projects-<a href="https://github.com/TheDuckAI/DuckTrack" target="_blank">DuckTrack</a> and <a href="https://github.com/OpenAdaptAI/OpenAdapt" target="_blank">OpenAdapt</a>. 
+We thank Yu Su, Caiming Xiong, and the anonymous reviewers for their insightful discussions and valuable feedback.
+We are grateful to Moonshot AI for providing training infrastructure and annotated data.
+We also sincerely appreciate Hao Yang, Zhengtao Wang, and Yanxu Chen from the Kimi Team for their strong infrastructure support and helpful guidance.
+We thank Chong Peng, Taofeng Xue, and Qiumian Huang from the <a href="https://github.com/meituan/EvoCUA" target="_blank">Meituan EvoCUA Team</a> for their contributions to vLLM integration.
+The development of our tool is based on the open-source projects-<a href="https://github.com/TheDuckAI/DuckTrack" target="_blank">DuckTrack</a> and <a href="https://github.com/OpenAdaptAI/OpenAdapt" target="_blank">OpenAdapt</a>.
 We are very grateful to their commitment to the open source community. Finally, we extend our deepest thanks to all annotators for their tremendous effort and contributions to this project.
 </p>
 

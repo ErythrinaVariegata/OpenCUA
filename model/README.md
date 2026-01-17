@@ -19,6 +19,7 @@
   <a href="https://opencua.xlang.ai/" style="display:inline-block;padding:8px 24px;background:#2b2b2b;color:#ffffff;border-radius:36px;text-decoration:none;font-weight:600;font-size:16px;">🌐 Website</a>
   <a href="https://huggingface.co/xlangai/OpenCUA-7B" style="display:inline-block;padding:8px 24px;background:#2b2b2b;color:#ffffff;border-radius:36px;text-decoration:none;font-weight:600;font-size:16px;">🤖 OpenCUA-7B</a>
   <a href="https://huggingface.co/xlangai/OpenCUA-32B" style="display:inline-block;padding:8px 24px;background:#2b2b2b;color:#ffffff;border-radius:36px;text-decoration:none;font-weight:600;font-size:16px;">🚀 OpenCUA-32B</a>
+  <a href="https://huggingface.co/xlangai/OpenCUA-72B" style="display:inline-block;padding:8px 24px;background:#2b2b2b;color:#ffffff;border-radius:36px;text-decoration:none;font-weight:600;font-size:16px;">🔥 OpenCUA-72B</a>
   <a href="https://huggingface.co/spaces/xlangai/OpenCUA-demo" style="display:inline-block;padding:8px 24px;background:#2b2b2b;color:#ffffff;border-radius:36px;text-decoration:none;font-weight:600;font-size:16px;">🤗 Hugging Face Demo</a>
 
 
@@ -28,6 +29,50 @@
 
 
 
+# 🚀 vLLM Serve (Recommended)
+
+We recommend using vLLM for production deployment. Requires **vllm>=0.12.0** with `--trust-remote-code`.
+
+```bash
+# OpenCUA-7B (single GPU)
+vllm serve xlangai/OpenCUA-7B \
+  --trust-remote-code \
+  --served-model-name opencua-7b \
+  --host 0.0.0.0 \
+  --port 8000
+
+# OpenCUA-32B (4 GPUs, tensor parallel)
+vllm serve xlangai/OpenCUA-32B \
+  --trust-remote-code \
+  --tensor-parallel-size 4 \
+  --served-model-name opencua-32b \
+  --host 0.0.0.0 \
+  --port 8000
+
+# OpenCUA-72B (8 GPUs, tensor parallel)
+vllm serve xlangai/OpenCUA-72B \
+  --trust-remote-code \
+  --tensor-parallel-size 8 \
+  --served-model-name opencua-72b \
+  --host 0.0.0.0 \
+  --port 8000
+
+# OpenCUA-72B with data parallelism (tp=2, dp=4 for 4 instances on 8 GPUs)
+vllm serve xlangai/OpenCUA-72B \
+  --trust-remote-code \
+  --tensor-parallel-size 2 \
+  --data-parallel-size 4 \
+  --gpu-memory-utilization 0.85 \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+Adjust `--tensor-parallel-size`, `--data-parallel-size`, and `--gpu-memory-utilization` based on your hardware configuration.
+
+For inference examples, see [inference/vllm_inference.py](./inference/vllm_inference.py).
+
+---
+
 #  Introduction
 <div style="
   max-width: 880px;              /* 可按需调节整体宽度 */
@@ -35,10 +80,10 @@
   text-align: justify;          /* 关键：两端对齐 */
   text-justify: inter-word;     /* 优化英文对齐效果 */
   line-height: 1.6;">
-  
-OpenCUA models (OpenCUA-7B and OpenCUA-32B) are end-to-end computer-use foundation models than can produce executable actions in the computer environments.  They are based on the weights of Qwen2.5-VL-7B-Instruction and Qwen2.5-VL-32B-Instruction. 
-They demonstrate superior performance across CUA benchmarks. In particular, <b>OpenCUA-32B</b> achieves an average success rate of **34.8%** on [OSWorld-Verified](https://os-world.github.io/), 
-establishing a new state-of-the-art (SOTA) among open-source models and surpassing OpenAI CUA (GPT-4o). Both models also have strong grounding performance, OpenCUA-32B achieves 59.6% on [OSWorld-G](https://osworld-grounding.github.io/) and 55.3% on [Screenspot-Pro](https://arxiv.org/abs/2504.07981).
+
+OpenCUA models (OpenCUA-7B, OpenCUA-32B, and OpenCUA-72B) are end-to-end computer-use foundation models that can produce executable actions in the computer environments with great planning and grounding capabilities. They are based on the Qwen2.5-VL model family.
+
+With the help of OpenCUA framework, our end-to-end agent models demonstrate strong performance across CUA benchmarks. In particular, <b>OpenCUA-72B</b> achieves an average success rate of **45.0%** on [OSWorld-Verified](https://os-world.github.io/), establishing a new state-of-the-art (SOTA) among open-source models. OpenCUA-72B also has strong grounding ability, achieving 37.3% (SOTA) on [UI-Vision](https://arxiv.org/abs/2504.07981) and 60.8% on [ScreenSpot-Pro](https://arxiv.org/abs/2504.07981).
 </div>
 
 ### Key Features
@@ -53,9 +98,8 @@ establishing a new state-of-the-art (SOTA) among open-source models and surpassi
 # Performance
 
 ### Online Agent Evaluation
-OpenCUA models achieves strong performance on **[OSWorld-Verified](https://os-world.github.io/)**. 
-OPENCUA-32B achieves the best performance among all open-source models with an average success rate of 34.8%, outperforming prior baselines by large margins. 
-It also closes the gap to proprietary Claude models.
+OpenCUA models achieves strong performance on **[OSWorld-Verified](https://os-world.github.io/)**.
+OpenCUA-72B achieves the best performance among all open-source models with an average success rate of 45.0%, establishing a new state-of-the-art (SOTA).
 <div align="center">
 
 | **Model**                        | **15 Steps** | **50 Steps** | **100 Steps** |
@@ -66,13 +110,14 @@ It also closes the gap to proprietary Claude models.
 | Claude 3.7 Sonnet             | 27.1     | 35.8     | 35.9      |
 | Claude 4 Sonnet               | 31.2     | 43.9     | 41.5      |
 | **Open-Source**               |          |          |           |
-| Qwen 2.5-VL-32B-Instruct       | 3.0      | —        | 3.9       |
-| Qwen 2.5-VL-72B-Instruct       | 4.4      | —        | 5.0       |
+| Qwen 2.5-VL-32B-Instruct      | 3.0      | —        | 3.9       |
+| Qwen 2.5-VL-72B-Instruct      | 4.4      | —        | 5.0       |
 | Kimi-VL-A3B                   | 9.7      | —        | 10.3      |
 | UI-TARS-72B-DPO               | 24.0     | 25.8     | 27.1      |
 | UI-TARS-1.5-7B                | 24.5     | 27.3     | 27.4      |
 | OpenCUA-7B *(Ours)*           | 24.3     | 27.9     | 26.6      |
-| **OpenCUA-32B *(Ours)***      | **29.7** | **34.1** | **34.8**  |
+| OpenCUA-32B *(Ours)*          | 29.7     | 34.1     | 34.8      |
+| **OpenCUA-72B *(Ours)***      | **39.0** | **44.9** | **45.0**  |
 </div>
 
 *OpenCUA scores are the mean of 3 independent runs.*
@@ -80,15 +125,14 @@ It also closes the gap to proprietary Claude models.
 ### GUI Grounding Performance
 <div align="center">
 
-| **Model** | **OSWorld-G** | **ScreenSpot-V2** | **ScreenSpot-Pro** |
-|-------|-----------|---------------|----------------|
-| Qwen2.5-VL-7B | 31.4 | 88.8 | 27.6 |  
-| Qwen2.5-VL-32B | 46.5 | 87.0 | 39.4 |
-| UI-TARS-72B | 57.1 | 90.3 | 38.1 |
-| **OpenCUA-A3B** | 48.6 | 91.4 | 28.5 |
-| **OpenCUA-7B** | 45.7 | 88.5 | 23.7 |
-| **OpenCUA-2.5-7B** | 55.3 | 92.3 | 50.0 |
-| **OpenCUA-2.5-32B** | **59.6** | **93.4** | **55.3** |
+| **Model** | **OSWorld-G** | **ScreenSpot-V2** | **ScreenSpot-Pro** | **UI-Vision** |
+|-------|-----------|---------------|----------------|----------|
+| Qwen2.5-VL-7B   | 31.4 | 88.8 | 27.6 | 0.85 |
+| Qwen2.5-VL-32B  | 46.5 | 87.0 | 39.4 | - |
+| UI-TARS-72B     | 57.1 | 90.3 | 38.1 | 25.5 |
+| **OpenCUA-7B**  | 55.3 | 92.3 | 50.0 | 29.7 |
+| **OpenCUA-32B** | 59.6 | 93.4 | 55.3 | 33.3 |
+| **OpenCUA-72B** | **59.2** | **92.9** | **60.8** | **37.3** |
 </div>
 
 ### AgentNetBench (Offline Evaluation)
@@ -100,8 +144,8 @@ It also closes the gap to proprietary Claude models.
 | Qwen2.5-VL-32B | 66.6 | 47.2 | 41.5 | 64.8 |
 | Qwen2.5-VL-72B | 67.2 | 52.6 | 50.5 | 67.0 |
 | OpenAI CUA          | 71.7 | 57.3 | **80.0** | 73.1 |
-| **OpenCUA-2.5-7B**  | 79.0 | 62.0 | 44.3 | 75.2 |
-| **OpenCUA-2.5-32B** | **81.9** | 66.1 | 55.7 | **79.1** |
+| **OpenCUA-7B**  | 79.0 | 62.0 | 44.3 | 75.2 |
+| **OpenCUA-32B** | **81.9** | 66.1 | 55.7 | **79.1** |
 </div>
 
 #  🚀 Quick Start
@@ -122,7 +166,7 @@ It also closes the gap to proprietary Claude models.
 First, install the required transformers dependencies:
 
 ```bash
-conda create -n opencua python=3.10
+conda create -n opencua python=3.12
 conda activate opencua
 pip install -r requirement.txt
 ```
@@ -137,101 +181,70 @@ snapshot_download(
 )
 ```
 
-## 🎯 GUI Grounding 
+## 🎯 GUI Grounding
 
-The following code demonstrates how to use OpenCUA models for GUI grounding tasks:
+First, start the vLLM server:
+
+```bash
+vllm serve xlangai/OpenCUA-7B \
+  --trust-remote-code \
+  --served-model-name opencua-7b \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+Then run the following code to test GUI grounding:
 
 ```python
 import base64
-import torch
-from transformers import AutoTokenizer, AutoModel, AutoImageProcessor
-from PIL import Image
-import json
+from openai import OpenAI
+
+# vLLM server configuration
+VLLM_BASE_URL = "http://localhost:8000/v1"
+MODEL_NAME = "opencua-7b"  # Should match --served-model-name in vllm serve
 
 def encode_image(image_path: str) -> str:
-    """Encode image to base64 string for model input."""
+    """Encode image to base64 string."""
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-def load_opencua_model(model_path: str):
-    """Load OpenCUA model, tokenizer, and image processor."""
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-    model = AutoModel.from_pretrained(
-        model_path, 
-        torch_dtype="auto", 
-        device_map="auto", 
-        trust_remote_code=True
-    )
-    image_processor = AutoImageProcessor.from_pretrained(model_path, trust_remote_code=True)
-    
-    return model, tokenizer, image_processor
+def run_grounding(image_path: str, instruction: str) -> str:
+    """Run GUI grounding inference via vLLM."""
+    client = OpenAI(base_url=VLLM_BASE_URL, api_key="EMPTY")
 
-def create_grounding_messages(image_path: str, instruction: str):
-    """Create chat messages for GUI grounding task."""
     system_prompt = (
         "You are a GUI agent. You are given a task and a screenshot of the screen. "
         "You need to perform a series of pyautogui actions to complete the task."
     )
-    
+
     messages = [
         {"role": "system", "content": system_prompt},
         {
             "role": "user",
             "content": [
-                {"type": "image", "image": f"data:image/png;base64,{encode_image(image_path)}"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{encode_image(image_path)}"}
+                },
                 {"type": "text", "text": instruction},
             ],
         },
     ]
-    return messages
 
-def run_inference(model, tokenizer, image_processor, messages, image_path):
-    """Run inference on the model."""
-    # Prepare text input
-    input_ids = tokenizer.apply_chat_template(
-        messages, tokenize=True, add_generation_prompt=True
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=messages,
+        max_tokens=512,
+        temperature=0,
     )
-    input_ids = torch.tensor([input_ids]).to(model.device)
-    
-    # Prepare image input  
-    image = Image.open(image_path).convert('RGB')
-    image_info = image_processor.preprocess(images=[image])
-    pixel_values = torch.tensor(image_info['pixel_values']).to(
-        dtype=torch.bfloat16, device=model.device
-    )
-    grid_thws = torch.tensor(image_info['image_grid_thw'])
-    
-    # Generate response
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            pixel_values=pixel_values,
-            grid_thws=grid_thws,
-            max_new_tokens=512,
-            temperature=0
-        )
-    
-    # Decode output
-    prompt_len = input_ids.shape[1]
-    generated_ids = generated_ids[:, prompt_len:]
-    output_text = tokenizer.batch_decode(
-        generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False
-    )[0]
-    
-    return output_text
+
+    return response.choices[0].message.content
 
 # Example usage
-model_path = "OpenCUA/OpenCUA-7B"  # or other model variants
 image_path = "screenshot.png"
 instruction = "Click on the submit button"
 
-# Load model
-model, tokenizer, image_processor = load_opencua_model(model_path)
-
-# Create messages and run inference
-messages = create_grounding_messages(image_path, instruction)
-result = run_inference(model, tokenizer, image_processor, messages, image_path)
-
+result = run_grounding(image_path, instruction)
 print("Model output:", result)
 ```
 
@@ -239,9 +252,14 @@ print("Model output:", result)
   <em>Expected result:</em> ```python\npyautogui.click(x=1443, y=343)\n```
 </div>
 
-You can also run the five grounding examples in [OpenCUA/model/inference/huggingface_inference.py](./inference/huggingface_inference.py):
-``` 
+You can run the five grounding examples with vLLM or HuggingFace Transformers:
+```
 cd ./model/inference/
+
+# vLLM (requires running vLLM server first)
+python vllm_inference.py
+
+# HuggingFace Transformers
 python huggingface_inference.py
 ```
 
@@ -253,14 +271,14 @@ Command for running OpenCUA-7B and OpenCUA-32B in OSWorld:
     python run_multienv_opencua.py \
         --headless \
         --observation_type screenshot \
-        --model OpenCUA-32B \
+        --model opencua-32b \
         --result_dir ./results --test_all_meta_path evaluation_examples/test_all_no_gdrive.json \
         --max_steps 100 \
         --num_envs 30  \
         --coordinate_type qwen25
 ```
-<div style="border-left: 6px solid #9ca3af; background: #f5f5f5; padding: 12px 16px; margin: 16px 0;">
-  <em>Currently we only supports huggingface inference. We are implementing the vLLM supports of OpenCUA models. Please stay tuned.</em>
+<div style="border-left: 6px solid #28a745; background: #e6ffe6; padding: 12px 16px; margin: 16px 0;">
+  <em>✅ vLLM is now fully supported! See the <a href="#-vllm-serve-recommended">vLLM Serve</a> section above for deployment instructions.</em>
 </div>
 
 ## Important Notes on Coordinate Systems
