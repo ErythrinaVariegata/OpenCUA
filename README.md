@@ -309,6 +309,10 @@ Empirically, models trained with these rich CoTs scale better with data and gene
   - OpenCUA models are developed based on the training infrastructure of Kimi Team.
   - Currently developing the training pipeline based on open-source infrastructure.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xlang-ai/OpenCUA&type=date&legend=top-left)](https://www.star-history.com/#xlang-ai/OpenCUA&type=date&legend=top-left)
+
 ## Acknowledge
 <p>
 We thank Yu Su, Caiming Xiong, and the anonymous reviewers for their insightful discussions and valuable feedback.
