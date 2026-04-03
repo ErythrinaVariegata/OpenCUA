@@ -136,10 +136,15 @@ class TrajectoryEvaluator:
                 max_detail_length=self.args.opencua_max_detail_length,
             )
 
-        # Unsupported
         else:
             valid_models = ["aguvis", "qwen2.5-vl", "qwen25vl", "opencua"]
-            raise ValueError(f"Unsupported model type: {self.args.model}. Valid types include: {', '.join(valid_models)}")
+            print(f"Downgrade using Qwen25VL for model: {self.args.model}, since not in valid types: {', '.join(valid_models)}")
+            agent_class = Qwen25VL
+            agent = agent_class(self.args.model, client)
+        ## Unsupported
+        #else:
+        #    valid_models = ["aguvis", "qwen2.5-vl", "qwen25vl", "opencua"]
+        #    raise ValueError(f"Unsupported model type: {self.args.model}. Valid types include: {', '.join(valid_models)}")
         
         evaluator = ActionEvaluator()
         
